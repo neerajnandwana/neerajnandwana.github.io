@@ -1,0 +1,7 @@
+{
+  "title": "My Awesome Personal Website",
+  "description": "A personal website built with Eleventy.",
+  "siteTitle": "My Site",
+  "authorName": "Your Name",
+  "year": "{% year %}"
+}

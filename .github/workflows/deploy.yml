@@ -1,0 +1,46 @@
+name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Or your default branch, e.g., master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write # Needed for github-pages action to deploy
+      id-token: write # Needed for OIDC token if using a more modern Pages deployment
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Specify your preferred Node.js version
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci # Use ci for cleaner installs in CI environments
+
+      - name: Build the site
+        run: npm run build # This runs 'eleventy' as defined in package.json
+        env:
+          # Add any build-time environment variables here if needed
+          # For example, if your site URL is different in production:
+          # ELEVENTY_PRODUCTION_URL: ${{ secrets.SITE_URL }} # You'd set this in repo secrets
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site' # The output directory of your Eleventy build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
