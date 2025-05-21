@@ -1,0 +1,17 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<article>
+    <h2>{{ title }}</h2>
+    <p class="date">Published on: <time datetime="{{ date | dateISO }}">{{ date | readableDate }}</time></p>
+    {% if tags %}
+    <p class="tags">Tags:
+        {% for tag in tags %}
+        <a href="/tags/{{ tag | slugify }}/">{{ tag }}</a>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+    {% endif %}
+
+    {{ content | safe }}
+</article>
+{% endblock %}
